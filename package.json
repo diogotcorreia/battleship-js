@@ -1,0 +1,24 @@
+{
+  "name": "battleship-js",
+  "version": "1.0.0",
+  "description": "A Battleship game made for the web",
+  "main": "server.js",
+  "repository": "https://github.com/diogotcorreia/battleship-js",
+  "author": "Diogo Correia <me@diogotc.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev:server": "cd client && yarn build && cd .. && yarn start",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.0"
+  }
+}

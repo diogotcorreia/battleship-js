@@ -3,21 +3,25 @@ import classnames from 'classnames';
 import React from 'react';
 
 const useStyles = makeStyles({
+  root: {
+    borderSpacing: 0,
+  },
   square: {
     width: 28,
     height: 28,
   },
   grey: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#eee',
   },
 });
 
-const BoardContent = ({ size }) => {
+const BoardContent = ({ size, boardRef }) => {
   const classes = useStyles();
+  const TableComponent = React.forwardRef((props, ref) => <table ref={boardRef} {...props} />);
   return (
-    <table>
+    <TableComponent ref={boardRef} className={classes.root}>
       <tbody>{generateBoard(size, classes)}</tbody>
-    </table>
+    </TableComponent>
   );
 };
 

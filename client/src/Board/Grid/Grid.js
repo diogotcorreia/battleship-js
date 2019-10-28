@@ -2,26 +2,25 @@ import { makeStyles } from '@material-ui/styles';
 import classnames from 'classnames';
 import React from 'react';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     borderSpacing: 0,
   },
   square: {
-    width: 28,
-    height: 28,
+    width: (props) => props.gridSize,
+    height: (props) => props.gridSize,
   },
   grey: {
-    backgroundColor: '#eee',
+    backgroundColor: theme.palette.background.paper,
   },
-});
+}));
 
-const BoardContent = ({ size, boardRef }) => {
-  const classes = useStyles();
-  const TableComponent = React.forwardRef((props, ref) => <table ref={boardRef} {...props} />);
+const BoardContent = ({ size, gridSize }) => {
+  const classes = useStyles({ gridSize });
   return (
-    <TableComponent ref={boardRef} className={classes.root}>
+    <table className={classes.root}>
       <tbody>{generateBoard(size, classes)}</tbody>
-    </TableComponent>
+    </table>
   );
 };
 

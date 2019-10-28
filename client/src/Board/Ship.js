@@ -5,22 +5,25 @@ import Draggable from 'react-draggable';
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.primary.main,
+    position: 'absolute',
+    top: 0,
   },
 }));
 
-const Ship = ({ width, height, boardRef }) => {
+const Ship = ({ width, height, startX, startY, gridSize }) => {
   const classes = useStyles();
-  console.log(boardRef.current);
   return (
     <Draggable
-      offsetParent={boardRef.current}
-      grid={[28, 28]}
-      defaultPosition={{ x: 28, y: 0 }}
-      positionOffset={{ x: 100, y: 100 }}
+      grid={[gridSize, gridSize]}
+      defaultPosition={{ x: gridSize * 12 + startX * gridSize, y: startY * gridSize }}
+      positionOffset={{ x: gridSize, y: gridSize }}
     >
-      <div className={classes.root} style={{ width: width * 28, height: height * 28 }} />
+      <div
+        className={classes.root}
+        style={{ width: width * gridSize, height: height * gridSize }}
+      />
     </Draggable>
   );
 };
 
-export default React.forwardRef((props, ref) => <Ship ref={ref} {...props} />);
+export default Ship;

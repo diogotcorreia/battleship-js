@@ -1,16 +1,22 @@
 import React from 'react';
 import Grid from './Grid/Grid';
 import Ships from './Ships';
-import Test from './Test';
 
-const Board = ({ size }) => {
-  const boardRef = React.createRef();
-  const Test2 = React.forwardRef((props, ref) => <Test boardRef={ref} {...props} />);
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(2),
+    position: 'relative',
+  },
+}));
+
+const Board = ({ size, gridSize }) => {
+  const classes = useStyles();
   return (
-    <div>
-      <Grid size={size} boardRef={boardRef} />
-      <Ships boardRef={boardRef} />
-      <Test2 ref={boardRef} />
+    <div className={classes.root}>
+      <Grid size={size} gridSize={gridSize} />
+      <Ships gridSize={gridSize} />
     </div>
   );
 };

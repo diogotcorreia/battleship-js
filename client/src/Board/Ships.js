@@ -2,18 +2,23 @@ import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 import Ship from './Ship';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
-    margin: theme.spacing(2),
+    position: 'absolute',
+    top: 0,
   },
-}));
+});
 
-const Ships = ({ boardRef }) => {
+const Ships = ({ gridSize }) => {
   const classes = useStyles();
-  const commonProps = { boardRef };
+  const commonProps = { gridSize };
   return (
     <div className={classes.root}>
-      <Ship width={4} height={1} {...commonProps} />
+      <Ship width={5} height={1} startX={0} startY={0} {...commonProps} />
+      <Ship width={4} height={1} startX={0} startY={2} {...commonProps} />
+      <Ship width={3} height={1} startX={0} startY={4} {...commonProps} />
+      <Ship width={3} height={1} startX={4} startY={4} {...commonProps} />
+      <Ship width={2} height={1} startX={0} startY={6} {...commonProps} />
     </div>
   );
 };

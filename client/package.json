@@ -6,8 +6,8 @@
   "dependencies": {
     "@material-ui/core": "^4.5.1",
     "classnames": "^2.2.6",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "react-draggable": "^4.1.0",
     "react-scripts": "3.2.0"
   },

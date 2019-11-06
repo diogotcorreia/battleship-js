@@ -11,12 +11,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Board = ({ size, gridSize }) => {
+const Board = () => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <Grid size={size} gridSize={gridSize} />
-      <Ships gridSize={gridSize} />
+    <div className={classes.root} id='board'>
+      <Grid />
+      <Ships />
     </div>
   );
 };

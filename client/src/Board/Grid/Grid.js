@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, useTheme } from '@material-ui/styles';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -7,19 +7,20 @@ const useStyles = makeStyles((theme) => ({
     borderSpacing: 0,
   },
   square: {
-    width: (props) => props.gridSize,
-    height: (props) => props.gridSize,
+    width: theme.board.gridSize,
+    height: theme.board.gridSize,
   },
   grey: {
     backgroundColor: theme.palette.background.paper,
   },
 }));
 
-const BoardContent = ({ size, gridSize }) => {
-  const classes = useStyles({ gridSize });
+const BoardContent = () => {
+  const classes = useStyles();
+  const theme = useTheme();
   return (
     <table className={classes.root}>
-      <tbody>{generateBoard(size, classes)}</tbody>
+      <tbody>{generateBoard(theme.board.boardSize, classes)}</tbody>
     </table>
   );
 };

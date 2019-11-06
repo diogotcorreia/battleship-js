@@ -10,13 +10,17 @@ const theme = createMuiTheme({
     secondary: { main: '#d32f2f' },
     type: 'dark',
   },
+  board: {
+    boardSize: 10,
+    gridSize: 48,
+  },
 });
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Board size={10} gridSize={48} />
+      <Board />
     </ThemeProvider>
   );
 };

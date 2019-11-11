@@ -1,24 +1,40 @@
+import RotateIcon from '@material-ui/icons/Rotate90DegreesCcwRounded';
 import { makeStyles, withTheme } from '@material-ui/styles';
+import classnames from 'classnames';
 import React from 'react';
 import Draggable from 'react-draggable';
-import classnames from 'classnames';
 
 class ShipController extends React.Component {
   constructor(props) {
     super(props);
     const {
       theme: {
-        board: { gridSize },
+        board: { gridSize, boardSize },
       },
       startX,
       startY,
+      size,
     } = this.props;
-    this.defaultPosition = { x: gridSize * (12 + startX), y: startY * gridSize };
+    this.defaultPosition = { x: gridSize * (boardSize + 2 + startX), y: startY * gridSize };
     this.state = {
       x: this.defaultPosition.x,
       y: this.defaultPosition.y,
+      width: size,
+      height: 1,
     };
   }
+
+  snapToGrid = (x, y) => {
+    const gridSize = this.props.theme.board.gridSize;
+    return {
+      x: Math.round(x / gridSize) * gridSize,
+      y: Math.round(y / gridSize) * gridSize,
+    };
+  };
+
+  onRotate = () => {
+    this.setState({ width: this.state.height, height: this.state.width });
+  };
 
   onStop = (_, data) => {
     const {
@@ -26,24 +42,25 @@ class ShipController extends React.Component {
         board: { gridSize, boardSize },
       },
     } = this.props;
+    const { x, y, width, height } = this.state;
+    const pos = this.snapToGrid(data.x, data.y);
     if (
-      (data.x !== this.defaultPosition.x || data.y !== this.defaultPosition.y) &&
-      (data.x > boardSize * gridSize || data.y > boardSize * gridSize)
-    )
-      return false;
-    console.log('updateState', data);
-    this.setState({ x: data.x, y: data.y });
+      (pos.x !== this.defaultPosition.x || pos.y !== this.defaultPosition.y) &&
+      (pos.x > (boardSize - width) * gridSize || pos.y > (boardSize - height) * gridSize)
+    ) {
+      this.setState(this.snapToGrid(x, y));
+      return;
+    }
+    this.setState(pos);
   };
 
   render() {
     const {
-      width,
-      height,
       theme: {
         board: { gridSize },
       },
     } = this.props;
-    const { x, y } = this.state;
+    const { x, y, width, height } = this.state;
     return (
       <Draggable
         grid={[gridSize, gridSize]}
@@ -51,9 +68,10 @@ class ShipController extends React.Component {
         defaultPosition={this.defaultPosition}
         positionOffset={{ x: gridSize, y: gridSize }}
         position={{ x, y }}
-        onDrag={this.onStop}
+        onStop={this.onStop}
+        cancel='.rotate-anchor'
       >
-        <Ship width={width * gridSize} height={height * gridSize} />
+        <Ship width={width * gridSize} height={height * gridSize} onRotate={this.onRotate} />
       </Draggable>
     );
   }
@@ -67,14 +85,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Ship = ({ width, height, className, style, ...props }) => {
+const Ship = ({ width, height, onRotate, className, style, ...props }) => {
   const classes = useStyles();
   return (
     <div
       className={classnames(classes.root, className)}
       style={{ width, height, ...style }}
       {...props}
-    />
+    >
+      <RotateIcon className='rotate-anchor' onClick={onRotate} />
+    </div>
   );
 };
 

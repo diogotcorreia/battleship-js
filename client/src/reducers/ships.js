@@ -10,8 +10,10 @@ const shipsDefault = fromJS([
 
 function mainReducer(state = shipsDefault, action) {
   switch (action.type) {
-    case 'SET_POSITION':
+    case 'SHIP_SET_POSITION':
       return state.update(action.ship, (ship) => ship.set('x', action.x).set('y', action.y));
+    case 'SHIP_ROTATE':
+      return state.update(action.ship, (ship) => ship.update('rotate', false, (v) => !v));
     default:
       return state;
   }

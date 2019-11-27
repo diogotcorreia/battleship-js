@@ -27,6 +27,7 @@ const ShipController = ({ index }) => {
   const data = useSelector((store) => selector(store.ships.get(index), boardSize, gridSize));
   const dispatch = useDispatch();
 
+  const hideRotate = data.width === 1 && data.height === 1;
   const onRotate = () => dispatch(rotateShip(index, boardSize));
   const onStop = (_, data) =>
     dispatch(moveShip(index, snapToGrid(data.x, data.y, gridSize), boardSize));
@@ -40,83 +41,15 @@ const ShipController = ({ index }) => {
       onStop={onStop}
       cancel='.rotate-anchor'
     >
-      <Ship width={data.width * gridSize} height={data.height * gridSize} onRotate={onRotate} />
+      <Ship
+        width={data.width * gridSize}
+        height={data.height * gridSize}
+        hideRotate={hideRotate}
+        onRotate={onRotate}
+      />
     </Draggable>
   );
 };
-
-/*class ShipController extends React.Component {
-  constructor(props) {
-    super(props);
-    const {
-      theme: {
-        board: { gridSize, boardSize },
-      },
-      startX,
-      startY,
-      size,
-    } = this.props;
-    this.defaultPosition = { x: gridSize * (boardSize + 2 + startX), y: startY * gridSize };
-    this.state = {
-      x: this.defaultPosition.x,
-      y: this.defaultPosition.y,
-      width: size,
-      height: 1,
-    };
-  }
-
-  snapToGrid = (x, y) => {
-    const gridSize = this.props.theme.board.gridSize;
-    return {
-      x: Math.round(x / gridSize) * gridSize,
-      y: Math.round(y / gridSize) * gridSize,
-    };
-  };
-
-  onRotate = () => {
-    this.setState({ width: this.state.height, height: this.state.width });
-  };
-
-  onStop = (_, data) => {
-    const {
-      theme: {
-        board: { gridSize, boardSize },
-      },
-    } = this.props;
-    const { x, y, width, height } = this.state;
-    const pos = this.snapToGrid(data.x, data.y);
-    if (
-      (pos.x !== this.defaultPosition.x || pos.y !== this.defaultPosition.y) &&
-      (pos.x > (boardSize - width) * gridSize || pos.y > (boardSize - height) * gridSize)
-    ) {
-      this.setState(this.snapToGrid(x, y));
-      return;
-    }
-    this.setState(pos);
-  };
-
-  render() {
-    const {
-      theme: {
-        board: { gridSize },
-      },
-    } = this.props;
-    const { x, y, width, height } = this.state;
-    return (
-      <Draggable
-        grid={[gridSize, gridSize]}
-        bounds='#board'
-        defaultPosition={this.defaultPosition}
-        positionOffset={{ x: gridSize, y: gridSize }}
-        position={{ x, y }}
-        onStop={this.onStop}
-        cancel='.rotate-anchor'
-      >
-        <Ship width={width * gridSize} height={height * gridSize} onRotate={this.onRotate} />
-      </Draggable>
-    );
-  }
-}*/
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -126,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Ship = ({ width, height, onRotate, className, style, ...props }) => {
+const Ship = ({ width, height, onRotate, className, style, hideRotate, ...props }) => {
   const classes = useStyles();
   return (
     <div
@@ -134,7 +67,7 @@ const Ship = ({ width, height, onRotate, className, style, ...props }) => {
       style={{ width, height, ...style }}
       {...props}
     >
-      <RotateIcon className='rotate-anchor' onClick={onRotate} />
+      {!hideRotate && <RotateIcon className='rotate-anchor' onClick={onRotate} />}
     </div>
   );
 };

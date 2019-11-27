@@ -6,6 +6,12 @@ const shipsDefault = fromJS([
   { size: 3, startX: 0, startY: 4 },
   { size: 3, startX: 4, startY: 4 },
   { size: 2, startX: 0, startY: 6 },
+  { size: 2, startX: 3, startY: 6 },
+  { size: 2, startX: 6, startY: 6 },
+  { size: 1, startX: 0, startY: 8 },
+  { size: 1, startX: 2, startY: 8 },
+  { size: 1, startX: 4, startY: 8 },
+  { size: 1, startX: 6, startY: 8 },
 ]);
 
 function mainReducer(state = shipsDefault, action) {

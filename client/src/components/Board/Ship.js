@@ -3,36 +3,41 @@ import { makeStyles, useTheme } from '@material-ui/styles';
 import classnames from 'classnames';
 import React from 'react';
 import Draggable from 'react-draggable';
-import { useSelector, useDispatch } from 'react-redux';
-import { rotateShip } from '../../actions/shipActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { moveShip, rotateShip } from '../../actions/shipActions';
 
-const selector = (ship) => {
-  console.log(ship);
+const selector = (ship, boardSize) => {
   return {
-    x: ship.get('x', ship.get('startX')),
+    x: ship.get('x', ship.get('startX') + boardSize + 2),
     y: ship.get('y', ship.get('startY')),
     width: ship.get('rotate', false) ? 1 : ship.get('size', 1),
     height: ship.get('rotate', false) ? ship.get('size', 1) : 1,
   };
 };
 
+const snapToGrid = (x, y, gridSize) => ({
+  x: Math.round(x / gridSize),
+  y: Math.round(y / gridSize),
+});
+
 const ShipController = ({ index }) => {
   const {
     board: { gridSize, boardSize },
   } = useTheme();
-  const data = useSelector((store) => selector(store.ships.get(index)));
-  console.log(data);
+  const data = useSelector((store) => selector(store.ships.get(index), boardSize, gridSize));
   const dispatch = useDispatch();
 
-  const onRotate = () => dispatch(rotateShip(index));
+  const onRotate = () => dispatch(rotateShip(index, boardSize));
+  const onStop = (_, data) =>
+    dispatch(moveShip(index, snapToGrid(data.x, data.y, gridSize), boardSize));
 
   return (
     <Draggable
       grid={[gridSize, gridSize]}
       bounds='#board'
       positionOffset={{ x: gridSize, y: gridSize }}
-      position={{ x: data.x, y: data.y }}
-      //onStop={this.onStop}
+      position={{ x: data.x * gridSize, y: data.y * gridSize }}
+      onStop={onStop}
       cancel='.rotate-anchor'
     >
       <Ship width={data.width * gridSize} height={data.height * gridSize} onRotate={onRotate} />

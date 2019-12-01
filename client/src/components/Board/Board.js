@@ -1,8 +1,10 @@
-import React from 'react';
+import { makeStyles } from '@material-ui/styles';
+import React, { useEffect } from 'react';
 import Grid from './Grid/Grid';
 import Ships from './Ships';
+import io from 'socket.io-client';
 
-import { makeStyles } from '@material-ui/styles';
+const socket = io();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,6 +15,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Board = () => {
   const classes = useStyles();
+  useEffect(() => {
+    socket.emit('my other event', { test: 'Working! :D' });
+  });
+
+  useEffect(() => {
+    socket.on('news', (data) => console.log(data));
+  });
+
   return (
     <div className={classes.root} id='board'>
       <Grid />

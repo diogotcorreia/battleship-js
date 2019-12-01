@@ -15,14 +15,14 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 
   // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
+  app.get('*', function(_, res) {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 }
 
 io.on('connection', function(socket) {
   socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function(data) {
+  socket.on('join_room', function(data) {
     console.log(data);
   });
 });

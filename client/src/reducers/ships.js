@@ -14,7 +14,7 @@ const shipsDefault = fromJS([
   { size: 1, startX: 6, startY: 8 },
 ]);
 
-function mainReducer(state = shipsDefault, action) {
+const mainReducer = (state = shipsDefault, action) => {
   switch (action.type) {
     case 'SHIP_MOVE':
       let newStateMove = state.update(action.ship, (ship) =>
@@ -29,7 +29,7 @@ function mainReducer(state = shipsDefault, action) {
     default:
       return state;
   }
-}
+};
 
 const isValid = (board, boardSize) =>
   board.every((ship1) => {
@@ -67,4 +67,5 @@ const isValid = (board, boardSize) =>
       );
     });
   });
+
 export default mainReducer;

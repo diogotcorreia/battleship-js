@@ -1,8 +1,14 @@
+import { CssBaseline } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import React from 'react';
 import Board from './Board/Board';
-import { CssBaseline } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
+import Menu from './Menu/Menu';
+import { SocketProvider } from '../context/SocketContext';
+import io from 'socket.io-client';
+import { SnackbarProvider } from 'notistack';
+
+const socket = io();
 
 const theme = createMuiTheme({
   palette: {
@@ -19,8 +25,13 @@ const theme = createMuiTheme({
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Board />
+      <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
+        <SocketProvider value={socket}>
+          <CssBaseline />
+          <Board />
+          <Menu />
+        </SocketProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

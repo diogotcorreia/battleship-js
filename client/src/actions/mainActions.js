@@ -1,5 +1,5 @@
 export const setPregame = (pregame) => ({
-  type: 'SET_PREGRAME',
+  type: 'SET_PREGAME',
   pregame,
 });
 

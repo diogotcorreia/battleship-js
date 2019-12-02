@@ -31,6 +31,10 @@ const JoinRoom = () => {
       enqueueSnackbar('Please place all ships in the board!', { variant: 'error' });
       return;
     }
+    if (!input.current.value) {
+      enqueueSnackbar('Invalid room name!', { variant: 'error' });
+      return;
+    }
     socket.emit('join_room', {
       room: input.current.value,
       ships: ships.map((v) => ({

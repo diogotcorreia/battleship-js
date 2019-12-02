@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 
 const shipsDefault = fromJS([
   { size: 5, startX: 0, startY: 0 },
-  { size: 4, startX: 0, startY: 2 },
+  /*  { size: 4, startX: 0, startY: 2 },
   { size: 3, startX: 0, startY: 4 },
   { size: 3, startX: 4, startY: 4 },
   { size: 2, startX: 0, startY: 6 },
@@ -11,7 +11,7 @@ const shipsDefault = fromJS([
   { size: 1, startX: 0, startY: 8 },
   { size: 1, startX: 2, startY: 8 },
   { size: 1, startX: 4, startY: 8 },
-  { size: 1, startX: 6, startY: 8 },
+  { size: 1, startX: 6, startY: 8 },*/ //TODO disabled for testing purposes
 ]);
 
 const mainReducer = (state = shipsDefault, action) => {

@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const connectionHandler = require('./connectionHandler');
 
 const app = express();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, { wsEngine: 'ws' });
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
@@ -20,11 +21,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-io.on('connection', function(socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('join_room', function(data) {
-    console.log(data);
-  });
-});
+io.on('connection', connectionHandler);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

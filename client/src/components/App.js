@@ -1,14 +1,13 @@
 import { CssBaseline } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import React from 'react';
-import Board from './Board/Board';
-import Menu from './Menu/Menu';
-import { SocketProvider } from '../context/SocketContext';
-import io from 'socket.io-client';
 import { SnackbarProvider } from 'notistack';
+import React from 'react';
+import io from 'socket.io-client';
+import { SocketProvider } from '../context/SocketContext';
+import Game from './Game';
 
-const socket = io();
+const socket = io('http://localhost:5000/'); // TODO add production stuff
 
 const theme = createMuiTheme({
   palette: {
@@ -28,8 +27,7 @@ const App = () => {
       <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
         <SocketProvider value={socket}>
           <CssBaseline />
-          <Board />
-          <Menu />
+          <Game />
         </SocketProvider>
       </SnackbarProvider>
     </ThemeProvider>

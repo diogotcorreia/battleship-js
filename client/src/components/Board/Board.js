@@ -12,10 +12,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Board = () => {
   const classes = useStyles();
-  /*useEffect(() => {
-    socket.emit('my other event', { test: 'Working! :D' });
-    socket.on('news', (data) => console.log(data));
-  });*/
 
   return (
     <div className={classes.root} id='board'>

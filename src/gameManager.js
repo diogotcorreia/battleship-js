@@ -1,29 +1,18 @@
-const games = {};
+const Game = require('./lib/Game');
 
-const addPlayerToGame = (game, player, board) => {
-  if (!games[game]) games[game] = { players: {} };
-  const players = games[game].players;
-  if (Object.keys(players).length >= 2) return false; // Game is full
-  players[player] = board;
-  return true;
+const games = [];
+
+const getOrCreateGame = (name) => {
+  let game = games.find((v) => v.id === name);
+  if (!game) games.push((game = new Game(name)));
+  return game;
 };
 
-const removePlayerFromGame = (player) => {
-  Object.keys(games).forEach((v) => {
-    const game = games[v];
-    const players = game.players;
-    delete players[player];
-    if (Object.keys(players).length === 0) delete games[v];
-  });
-};
-
-const isGameFull = (game) => {
-  if (!games[game]) return false;
-  return Object.keys(games[game].players).length >= 2;
+const getGameByPlayer = (player) => {
+  return games.find((v) => v.hasPlayer(player));
 };
 
 module.exports = {
-  addPlayerToGame,
-  removePlayerFromGame,
-  isGameFull,
+  getOrCreateGame,
+  getGameByPlayer,
 };

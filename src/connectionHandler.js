@@ -1,19 +1,23 @@
 const gameManager = require('./gameManager.js');
 
 const onJoinRoom = (socket) => (data) => {
-  if (gameManager.addPlayerToGame(data.room, socket.id, data.ships)) {
+  const game = gameManager.getOrCreateGame(data.room);
+  if (game.addPlayer(socket.id, data.ships)) {
     socket.emit('join_room', { room: data.room });
     socket.join(`room-${data.room}`);
-    if (gameManager.isGameFull(data.room)) {
+    if (game.isFull()) {
       socket.broadcast.to(`room-${data.room}`).emit('start_game');
       socket.emit('start_game');
     }
-  } else
-    socket.emit('dispatch_error', { error: `Failed to join room "${data.room}": room is full` });
+    return;
+  }
+  socket.emit('dispatch_error', { error: `Failed to join room "${data.room}": room is full` });
 };
 
 const onDisconnect = (socket) => () => {
-  gameManager.removePlayerFromGame(socket.id);
+  const game = gameManager.getGameByPlayer(socket.id);
+  if (!game) return;
+  game.removePlayer(socket.id);
   socket.emit('leave_room');
 };
 

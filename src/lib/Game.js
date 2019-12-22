@@ -29,6 +29,36 @@ function Game(id) {
   };
 
   this.isFull = () => !!this.player1 && !!this.player2;
+
+  this.startGame = (socket) => {
+    socket.to(`room-${this.id}`).emit('start_game');
+    socket.to(this.player1.id).emit(
+      'add_to_board',
+      'own',
+      this.player1.board.reduce((result, v, x) => {
+        result.push(
+          ...v.reduce((result, v, y) => {
+            if (v !== 0) result.push({ x, y, value: v });
+            return result;
+          }, [])
+        );
+        return result;
+      }, [])
+    );
+    socket.to(this.player2.id).emit(
+      'add_to_board',
+      'own',
+      this.player2.board.reduce((result, v, x) => {
+        result.push(
+          ...v.reduce((result, v, y) => {
+            if (v !== 0) result.push({ x, y, value: v });
+            return result;
+          }, [])
+        );
+        return result;
+      }, [])
+    );
+  };
 }
 
 module.exports = Game;

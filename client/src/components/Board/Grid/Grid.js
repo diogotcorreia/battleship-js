@@ -1,6 +1,8 @@
 import { makeStyles, useTheme } from '@material-ui/styles';
 import classnames from 'classnames';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Map } from 'immutable';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,17 +17,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const colorMap = {
+  1: '#fc8c03',
+  2: '#039be5',
+  3: '#f53307',
+  4: '#07f596',
+};
+
 const BoardContent = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const board = useSelector((state) => state.board.get('own', Map()));
   return (
     <table className={classes.root}>
-      <tbody>{generateBoard(theme.board.boardSize, classes)}</tbody>
+      <tbody>{generateBoard(theme.board.boardSize, classes, board)}</tbody>
     </table>
   );
 };
 
-const generateBoard = (size, classes) => {
+const generateBoard = (size, classes, board) => {
   let result = [];
   for (let i = 0; i <= size; i++) {
     let children = [];
@@ -50,6 +60,7 @@ const generateBoard = (size, classes) => {
         <td
           className={classnames(classes.square, { [classes.grey]: k % 2 === i % 2 })}
           key={`box-${i}-${k}`}
+          style={{ backgroundColor: colorMap[board.getIn([k - 1, i - 1], 0)] }}
         />
       );
     }

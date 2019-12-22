@@ -2,6 +2,7 @@ import { useSnackbar } from 'notistack';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setGameRoom, setPregame } from '../actions/mainActions';
+import { addToBoard } from '../actions/boardActions';
 import SocketContext from '../context/SocketContext';
 import Board from './Board/Board';
 import Menu from './Menu/Menu';
@@ -28,6 +29,10 @@ const Game = () => {
 
     socket.on('start_game', () => {
       dispatch(setPregame(false));
+    });
+
+    socket.on('add_to_board', (board, data) => {
+      dispatch(addToBoard(board, data));
     });
   });
 

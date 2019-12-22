@@ -22,6 +22,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-io.on('connection', connectionHandler);
+connectionHandler(io);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

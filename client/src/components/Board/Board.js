@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Grid from './Grid/Grid';
 import Ships from './Ships';
 
@@ -12,11 +13,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Board = () => {
   const classes = useStyles();
+  const pregame = useSelector((store) => store.main.get('pregame', true));
 
   return (
     <div className={classes.root} id='board'>
       <Grid />
-      <Ships />
+      {pregame && <Ships />}
     </div>
   );
 };

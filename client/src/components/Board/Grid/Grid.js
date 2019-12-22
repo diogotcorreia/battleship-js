@@ -66,14 +66,15 @@ const generateBoard = (size, classes, board, clickable, onTileClick) => {
         );
         continue;
       }
+      let clickableTile = clickable && board.getIn([k - 1, i - 1], 0) === 0;
       children.push(
         <td
-          onClick={clickable && onTileClick(k - 1, i - 1)}
+          onClick={clickableTile && onTileClick(k - 1, i - 1)}
           className={classnames(classes.square, { [classes.grey]: k % 2 === i % 2 })}
           key={`box-${i}-${k}`}
           style={{
             backgroundColor: colorMap[board.getIn([k - 1, i - 1], 0)],
-            cursor: clickable ? 'pointer' : 'default',
+            cursor: clickableTile ? 'pointer' : 'default',
           }}
         />
       );

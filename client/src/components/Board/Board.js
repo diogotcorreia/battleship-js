@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2),
     position: 'relative',
+    display: 'flex',
   },
 }));
 
@@ -17,8 +18,8 @@ const Board = () => {
 
   return (
     <div className={classes.root} id='board'>
-      <Grid />
-      {pregame && <Ships />}
+      <Grid boardName='own' />
+      {pregame ? <Ships /> : <Grid boardName='opponent' clickable />}
     </div>
   );
 };

@@ -1,11 +1,13 @@
 const Player = require('./Player');
+const SlotStatus = require('./SlotStatus');
 
-function Game(id) {
+function Game(id, io) {
   this.id = id;
+  this.io = io;
   this.createdTime = Date.now();
   this.player1 = null;
   this.player2 = null;
-  this.turn = false; // false = player1, true = player2
+  this.turn = Math.random() >= 0.5; // false = player1, true = player2; random first turn
 
   this.addPlayer = (id, ships) => {
     if (!this.player1) this.player1 = new Player(id, ships);
@@ -24,40 +26,62 @@ function Game(id) {
   };
 
   this.getOpponent = (id) => {
-    if (!!this.player1 && this.player1.id === id) return player2;
-    return player1;
+    if (!!this.player1 && this.player1.id === id) return this.player2;
+    return this.player1;
   };
 
   this.isFull = () => !!this.player1 && !!this.player2;
 
-  this.startGame = (socket) => {
-    socket.to(`room-${this.id}`).emit('start_game');
-    socket.to(this.player1.id).emit(
-      'add_to_board',
-      'own',
-      this.player1.board.reduce((result, v, x) => {
-        result.push(
-          ...v.reduce((result, v, y) => {
-            if (v !== 0) result.push({ x, y, value: v });
-            return result;
-          }, [])
-        );
-        return result;
-      }, [])
-    );
-    socket.to(this.player2.id).emit(
-      'add_to_board',
-      'own',
-      this.player2.board.reduce((result, v, x) => {
-        result.push(
-          ...v.reduce((result, v, y) => {
-            if (v !== 0) result.push({ x, y, value: v });
-            return result;
-          }, [])
-        );
-        return result;
-      }, [])
-    );
+  this.startGame = () => {
+    this.io.to(`room-${this.id}`).emit('start_game');
+    const sendStartingBoard = (player) => {
+      this.io.to(player.id).emit(
+        'add_to_board',
+        'own',
+        player.board.reduce((result, v, x) => {
+          result.push(
+            ...v.reduce((result, v, y) => {
+              if (v !== 0) result.push({ x, y, value: v });
+              return result;
+            }, [])
+          );
+          return result;
+        }, [])
+      );
+    };
+    sendStartingBoard(this.player1);
+    sendStartingBoard(this.player2);
+    this.sendTurnData();
+  };
+
+  this.sendTurnData = () => {
+    this.io.to(this.player1.id).emit('turn_data', !this.turn);
+    this.io.to(this.player2.id).emit('turn_data', this.turn);
+  };
+
+  this.handlePlay = (playerId, play) => {
+    // Check if play is legal
+    if (this.player1.id === playerId) {
+      if (this.turn) return;
+    } else if (!this.turn) return;
+
+    this.turn = !this.turn;
+    const opponent = this.getOpponent(playerId);
+    switch (opponent.board[play.x][play.y]) {
+      case SlotStatus.SHIP_NOT_FOUND:
+      case SlotStatus.SHIP_DOWN:
+        opponent.board[play.x][play.y] = SlotStatus.SHIP_DOWN;
+        break;
+      default:
+        opponent.board[play.x][play.y] = SlotStatus.WATER;
+    }
+    this.io
+      .to(playerId)
+      .emit('add_to_board', 'opponent', [{ ...play, value: opponent.board[play.x][play.y] }]);
+    this.io
+      .to(opponent.id)
+      .emit('add_to_board', 'own', [{ ...play, value: opponent.board[play.x][play.y] }]);
+    this.sendTurnData();
   };
 }
 

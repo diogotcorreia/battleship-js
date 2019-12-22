@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setGameRoom, setPregame, setTurn } from '../actions/mainActions';
+import { setGameRoom, setTurn, setGameState } from '../actions/mainActions';
 import { addToBoard } from '../actions/boardActions';
 import SocketContext from '../context/SocketContext';
 import Board from './Board/Board';
@@ -28,7 +28,7 @@ const Game = () => {
     });
 
     socket.on('start_game', () => {
-      dispatch(setPregame(false));
+      dispatch(setGameState('PLAYING'));
     });
 
     socket.on('add_to_board', (board, data) => {
@@ -37,6 +37,12 @@ const Game = () => {
 
     socket.on('turn_data', (turn) => {
       dispatch(setTurn(turn));
+    });
+
+    socket.on('game_end', (won) => {
+      dispatch(setGameState('OVER'));
+      if (won) enqueueSnackbar(`You've won the game! Congratulations!`, { variant: 'success' });
+      else enqueueSnackbar(`You've lost the game ;( Better luck next time...`, { variant: 'info' });
     });
   });
 

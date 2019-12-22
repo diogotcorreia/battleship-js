@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Board = () => {
   const classes = useStyles();
-  const pregame = useSelector((store) => store.main.get('pregame', true));
+  const pregame = useSelector((store) => store.main.get('gameState', 'PREGAME') === 'PREGAME');
 
   return (
     <div className={classes.root} id='board'>

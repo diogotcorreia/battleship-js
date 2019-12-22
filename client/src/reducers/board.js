@@ -6,6 +6,8 @@ const mainReducer = (state = Map(), action) => {
       return state.update(action.board, Map(), (boardDefault) =>
         action.tiles.reduce((board, v) => board.setIn([v.x, v.y], v.value), boardDefault)
       );
+    case 'RESET_BOARD':
+      return Map();
     default:
       return state;
   }

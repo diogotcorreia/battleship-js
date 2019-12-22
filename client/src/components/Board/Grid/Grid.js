@@ -69,7 +69,7 @@ const generateBoard = (size, classes, board, clickable, onTileClick) => {
       let clickableTile = clickable && board.getIn([k - 1, i - 1], 0) === 0;
       children.push(
         <td
-          onClick={clickableTile && onTileClick(k - 1, i - 1)}
+          onClick={clickableTile ? onTileClick(k - 1, i - 1) : undefined}
           className={classnames(classes.square, { [classes.grey]: k % 2 === i % 2 })}
           key={`box-${i}-${k}`}
           style={{

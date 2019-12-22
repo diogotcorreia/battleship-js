@@ -1,7 +1,7 @@
 const Player = require('./Player');
 const SlotStatus = require('./SlotStatus');
 
-function Game(id, io) {
+function Game(id, io, removeGameHandler) {
   this.id = id;
   this.io = io;
   this.createdTime = Date.now();
@@ -89,6 +89,14 @@ function Game(id, io) {
         ...changes,
       ]);
     this.sendTurnData();
+
+    if (opponent.availableShips.length === 0) this.handleGameEnd(playerId);
+  };
+
+  this.handleGameEnd = (winner) => {
+    this.io.to(this.player1.id).emit('game_end', winner === this.player1.id);
+    this.io.to(this.player2.id).emit('game_end', winner === this.player2.id);
+    removeGameHandler(this.id);
   };
 }
 

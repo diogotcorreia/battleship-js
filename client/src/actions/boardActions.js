@@ -3,3 +3,7 @@ export const addToBoard = (board, tiles) => ({
   board,
   tiles,
 });
+
+export const resetBoard = () => ({
+  type: 'RESET_BOARD',
+});

@@ -1,6 +1,6 @@
-export const setPregame = (pregame) => ({
-  type: 'SET_PREGAME',
-  pregame,
+export const setGameState = (state) => ({
+  type: 'SET_GAME_STATE',
+  state,
 });
 
 export const setGameRoom = (room) => ({

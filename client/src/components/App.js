@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 import { SocketProvider } from '../context/SocketContext';
 import Game from './Game';
 
-const socket = io('http://localhost:5000/'); // TODO add production stuff
+const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000/');
 
 const theme = createMuiTheme({
   palette: {

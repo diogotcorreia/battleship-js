@@ -75,12 +75,19 @@ function Game(id, io) {
       default:
         opponent.board[play.x][play.y] = SlotStatus.WATER;
     }
+    const changes = opponent.checkSunkShips();
     this.io
       .to(playerId)
-      .emit('add_to_board', 'opponent', [{ ...play, value: opponent.board[play.x][play.y] }]);
+      .emit('add_to_board', 'opponent', [
+        { ...play, value: opponent.board[play.x][play.y] },
+        ...changes,
+      ]);
     this.io
       .to(opponent.id)
-      .emit('add_to_board', 'own', [{ ...play, value: opponent.board[play.x][play.y] }]);
+      .emit('add_to_board', 'own', [
+        { ...play, value: opponent.board[play.x][play.y] },
+        ...changes,
+      ]);
     this.sendTurnData();
   };
 }

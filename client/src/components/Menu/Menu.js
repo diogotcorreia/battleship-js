@@ -28,6 +28,10 @@ const Menu = () => {
         <Typography variant='body1' component='p'>
           <strong>{turn ? "It's your turn" : "Wait for you opponent's turn"}</strong>
         </Typography>
+        <Typography variant='body1' component='p'>
+          To play, click on a tile in your <strong>opponent's board</strong>. That tile will turn
+          blue if it's a miss or red if it's a hit.
+        </Typography>
       </div>
     );
   else if (gameState === 'OVER')

@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import classnames from 'classnames';
 import { Map } from 'immutable';
@@ -9,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     borderSpacing: 0,
     marginRight: theme.board.gridSize * 2,
+    tableLayout: 'fixed',
+    width: 'fit-content',
   },
   square: {
     width: theme.board.gridSize,
@@ -16,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
   grey: {
     backgroundColor: theme.palette.background.paper,
+  },
+  title: {
+    textAlign: 'center',
   },
 }));
 
@@ -25,7 +31,7 @@ const colorMap = {
   3: '#f53307',
 };
 
-const BoardContent = ({ boardName, clickable }) => {
+const BoardContent = ({ boardName, clickable, title }) => {
   const socket = useContext(SocketContext);
   const classes = useStyles();
   const theme = useTheme();
@@ -37,11 +43,18 @@ const BoardContent = ({ boardName, clickable }) => {
     socket.emit('execute_play', { x, y });
   };
   return (
-    <table className={classes.root}>
-      <tbody>
-        {generateBoard(theme.board.boardSize, classes, board, clickable && turn, onTileClick)}
-      </tbody>
-    </table>
+    <div>
+      {title && (
+        <Typography variant='h6' component='p' className={classes.title}>
+          {title}
+        </Typography>
+      )}
+      <table className={classes.root}>
+        <tbody>
+          {generateBoard(theme.board.boardSize, classes, board, clickable && turn, onTileClick)}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

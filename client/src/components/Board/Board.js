@@ -18,8 +18,8 @@ const Board = () => {
 
   return (
     <div className={classes.root} id='board'>
-      <Grid boardName='own' />
-      {pregame ? <Ships /> : <Grid boardName='opponent' clickable />}
+      <Grid boardName='own' title={!pregame && 'Your board'} />
+      {pregame ? <Ships /> : <Grid boardName='opponent' title="Opponent's board" clickable />}
     </div>
   );
 };

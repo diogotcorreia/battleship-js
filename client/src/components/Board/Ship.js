@@ -35,7 +35,7 @@ const ShipController = ({ index }) => {
   return (
     <Draggable
       grid={[gridSize, gridSize]}
-      bounds='#board'
+      //bounds='#board'
       positionOffset={{ x: gridSize, y: gridSize }}
       position={{ x: data.x * gridSize, y: data.y * gridSize }}
       onStop={onStop}

@@ -26,7 +26,7 @@ const Menu = () => {
     return (
       <div className={classes.root}>
         <Typography variant='body1' component='p'>
-          <strong>{turn ? "It's your turn" : "Wait for you opponent's turn"}</strong>
+          <strong>{turn ? "It's your turn" : "Wait for your opponent's turn"}</strong>
         </Typography>
         <Typography variant='body1' component='p'>
           To play, click on a tile on your <strong>opponent's board</strong>. That tile will turn

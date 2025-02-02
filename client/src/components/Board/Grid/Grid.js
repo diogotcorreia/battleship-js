@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     borderSpacing: 0,
     marginRight: theme.board.gridSize * 2,
     tableLayout: 'fixed',
-    width: 'fit-content',
+    width: 'max-content',
   },
   square: {
     width: theme.board.gridSize,

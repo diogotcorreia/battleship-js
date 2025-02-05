@@ -1,6 +1,6 @@
 const SlotStatus = require('./SlotStatus');
 
-const BOARD_SIZE = process.env.BOARD_SIZE || 12;
+const BOARD_SIZE = parseInt(process.env.BOARD_SIZE || 10, 10);
 
 function Player(id, ships = []) {
   this.id = id;
@@ -43,7 +43,7 @@ function Player(id, ships = []) {
 }
 
 const generateBoardFromShips = (ships) => {
-  // Create empty board based on BOARD_SIZE (default is 12)
+  // Create empty board based on BOARD_SIZE (default is 10)
   // board[x][y]
   const board = Array(BOARD_SIZE)
     .fill(0)
